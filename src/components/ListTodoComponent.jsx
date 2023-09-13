@@ -24,6 +24,11 @@ const ListTodoComponent = () => {
         navigate('/add-todo')
     }
 
+    function updateTodo(id){
+        console.log(id)
+        navigate(`/update-todo/${id}`)
+    }
+
     return (
         <div className='container'>
             <h2 className='text-center' >List of Todos</h2>
@@ -36,6 +41,7 @@ const ListTodoComponent = () => {
                             <th>Todo Title</th>
                             <th>Todo Description</th>
                             <th>Todo Completed</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +52,9 @@ const ListTodoComponent = () => {
                                     <td>{todo.title}</td>
                                     <td>{todo.description}</td>
                                     <td>{todo.completed ? 'YES': 'NO'}</td>
+                                    <td>
+                                        <button className='btn btn-info' onClick={()=> updateTodo(todo.id)}>Update</button>
+                                    </td>
                                 </tr>
                             )
                         }
