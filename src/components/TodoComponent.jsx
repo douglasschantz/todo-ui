@@ -1,44 +1,54 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { getTodo, saveTodo } from '../services/TodoService'
+import { getTodo, saveTodo, updateTodo } from '../services/TodoService'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const TodoComponent = () => {
 
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState()
+  const [description, setDescription] = useState('')
   const [completed, setCompleted] = useState(false)
   const navigate = useNavigate()
-  const {id} = useParams()
+  const { id } = useParams()
 
   function saveOrUpdateTodo(e) {
     e.preventDefault()
+
     const todo = { title, description, completed }
     console.log(todo)
-    saveTodo(todo).then((response) =>{
-      console.log(response.data)
-      navigate('/todos')
-    }).catch(error => {
-      console.error(error);
-    })
+
+    if (id) {
+      updateTodo(id, todo).then((response) => {
+        navigate('/todos')
+      }).catch(error => {
+        console.error(error)
+      })
+    } else {
+      saveTodo(todo).then((response) => {
+        console.log(response.data)
+        navigate('/todos')
+      }).catch(error => {
+        console.error(error);
+      })
+    }
   }
-  
-  function pageTitle(){
-    if(id){
+
+  function pageTitle() {
+    if (id) {
       return <h2 className='text-center'>Update Todo</h2>
-    }else{
+    } else {
       return <h2 className='text-center'>Add Todo</h2>
     }
   }
 
-  useEffect(()=>{
-    if(id){
-      getTodo(id).then((response)=>{
+  useEffect(() => {
+    if (id) {
+      getTodo(id).then((response) => {
         console.log(response.data)
         setTitle(response.data.title)
         setDescription(response.data.description)
         setCompleted(response.data.completed)
-      }).catch(error =>{
+      }).catch(error => {
         console.log(error);
       })
     }
@@ -46,7 +56,7 @@ const TodoComponent = () => {
 
   return (
     <div className='container'>
-      <div style={{paddingTop: "40px"}} className='row'>
+      <div style={{ paddingTop: "40px" }} className='row'>
         <div className='card col-md-6 offset-md-3 offset-md-3'>
           {pageTitle()}
           <div className='card-body'>
@@ -59,6 +69,7 @@ const TodoComponent = () => {
                   name='title'
                   value={title}
                   onChange={(e) => setTitle(e.target.value)} />
+                  onChange={(e) => onInputChange(e)}
 
                 <label className='form-label'>Todo Description</label>
                 <input type="text"
@@ -79,7 +90,7 @@ const TodoComponent = () => {
                 </div>
               </div>
 
-              <button className='btn btn-success' onClick={(e)=>saveOrUpdateTodo(e)}>Submit</button>
+              <button className='btn btn-success' onClick={(e) => saveOrUpdateTodo(e)}>Submit</button>
             </form>
           </div>
         </div>
