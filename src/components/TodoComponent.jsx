@@ -52,7 +52,7 @@ const TodoComponent = () => {
         console.log(error);
       })
     }
-  })
+  }, [id])
 
   return (
     <div className='container'>
@@ -69,7 +69,7 @@ const TodoComponent = () => {
                   name='title'
                   value={title}
                   onChange={(e) => setTitle(e.target.value)} />
-                  onChange={(e) => onInputChange(e)}
+                 
 
                 <label className='form-label'>Todo Description</label>
                 <input type="text"
